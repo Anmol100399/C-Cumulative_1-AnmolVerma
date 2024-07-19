@@ -1,0 +1,19 @@
+﻿    @model IEnumerable<C__Cumulative_1_AnmolVerma.Models.Teacher>
+    @{
+        ViewBag.Title = "List";
+    }
+
+    <div id="containerlist">
+        <h2>List of Teachers</h2>
+        <form action= "/Teacher/List" method = "GET">
+            <input type = "text" name = "SearchKey" autocomplete = "off" />
+            <input type = "submit" value = "Search" name= "SearchKey"/>
+        </form>
+        @foreach (var teacher in Model)
+        {
+            <div class="listitem row">
+                <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname </a></div>
+            </div>
+        }
+    </div>
+

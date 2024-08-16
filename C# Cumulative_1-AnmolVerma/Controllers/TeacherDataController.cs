@@ -22,7 +22,7 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
         /// </summary>
         /// <example>GET api/TeacherData/ListTeachers</example>
         /// <returns>
-        /// A list of authors (first names and last names)
+        /// A list of teachers (first names and last names)
         /// </returns>
         [HttpGet]
         [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
@@ -55,8 +55,8 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
                 string TeacherFname = ResultSet["teacherfname"].ToString();
                 string TeacherLname = ResultSet["teacherlname"].ToString();
                 string EmployeeNumber = ResultSet["employeenumber"].ToString();
-                string HireDate = ResultSet["hiredate"].ToString();
-                string Salary = ResultSet["salary"].ToString();
+                DateTime HireDate = (DateTime)ResultSet["hiredate"];
+                decimal Salary = Convert.ToDecimal(ResultSet["salary"]);
 
                 Teacher NewTeacher = new Teacher();
                 NewTeacher.TeacherId = TeacherId;
@@ -110,8 +110,8 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
                 string TeacherFname = ResultSet["teacherfname"].ToString();
                 string TeacherLname = ResultSet["teacherlname"].ToString();
                 string EmployeeNumber = ResultSet["employeenumber"].ToString();
-                string HireDate = ResultSet["hiredate"].ToString();
-                string Salary = ResultSet["salary"].ToString();
+                DateTime HireDate = (DateTime)ResultSet["hiredate"];
+                decimal Salary = Convert.ToDecimal(ResultSet["salary"]);
 
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
@@ -126,7 +126,7 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
         }
 
         /// <summary>
-        /// Deletes an Author from the connected MySQL Database if the ID of that teacher exists. Does NOT maintain relational integrity.
+        /// Deletes an Teacher from the connected MySQL Database if the ID of that teacher exists. Does NOT maintain relational integrity.
         /// </summary>
         /// <param name="id">The ID of the teacher.</param>
         /// <example>POST /api/TeacherData/DeleteTeacher/3</example>
@@ -162,12 +162,11 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
         /// POST api/TeacherData/AddTeacher
         /// FORM DATA / POST DATA / REQUEST BODY 
         /// {
-        /// "TeacherId":"ID",
         ///	"TeacherFname":"Anmol",
         ///	"TeacherLname":"Verma",
-        ///	"EmployeeNumber":"EmployeeNumber",
-        ///	"HireDate":"YYYY-MM-DD",
-        ///	"Salary":"Salary"
+        ///	"EmployeeNumber":"N01698122",
+        ///	"HireDate":"10-03-1999",
+        ///	"Salary":"50.50"
         /// }
         /// </example>
         [HttpPost]
@@ -198,6 +197,52 @@ namespace C__Cumulative_1_AnmolVerma.Controllers
             cmd.ExecuteNonQuery();
 
             Conn.Close();
+        }
+
+        /// <summary>
+        /// Updates an Teacher on the MySQL Database. 
+        /// </summary>
+        /// <param name="TeacherInfo">An object with fields that map to the columns of the teacher's table.</param>
+        /// <example>
+        /// POST api/TeacherData/UpdateTeacher/208 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"TeacherFname":"Anmol",
+        ///	"TeacherLname":"Verma",
+        ///	"EmployeeNumber":"N01698122",
+        ///	"HireDate":"10-03-1999",
+        ///	"Salary":"50.50"
+        /// }
+        /// </example>
+        [HttpPost]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateTeacher(int teacherid, [FromBody] Teacher TeacherInfo)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Debug.WriteLine(TeacherInfo.TeacherFname);
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update teachers set teacherfname=@teacherfname, teacherlname=@teacherlname, employeenumber=@employeenumber, hiredate=@hiredate, salary=@salary  where teacherid=@teacherid";
+            cmd.Parameters.AddWithValue("@teacherid", teacherid);
+            cmd.Parameters.AddWithValue("@teacherfname", TeacherInfo.TeacherFname);
+            cmd.Parameters.AddWithValue("@teacherlname", TeacherInfo.TeacherLname);
+            cmd.Parameters.AddWithValue("@employeenumber", TeacherInfo.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@hiredate", TeacherInfo.HireDate);
+            cmd.Parameters.AddWithValue("@salary", TeacherInfo.Salary);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
         }
     }
 }

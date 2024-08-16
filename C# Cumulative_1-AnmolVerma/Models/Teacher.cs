@@ -11,7 +11,8 @@ namespace C__Cumulative_1_AnmolVerma.Models
         public string TeacherFname;
         public string TeacherLname;
         public string EmployeeNumber;
-        public string HireDate;
-        public string Salary;
+        public DateTime HireDate;
+        public decimal Salary;
+        public Teacher() { }
     }
 }

@@ -1,0 +1,37 @@
+﻿@model C__Cumulative_1_AnmolVerma.Models.Teacher
+@{
+    ViewBag.Title = "UpdateConfirm";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Teacher/Show/@Model.TeacherId">Back</a>
+    </nav>
+    <h2>Update Teacher</h2>
+    <form method="POST" action="/Teacher/UpdateConfirm/@Model.TeacherId">
+        <div class="inputrow">
+            <label for="teacherFname">First Name:</label>
+            <input type="text" id="teacherFname" name="teacherFname" value="@Model.TeacherFname"/>
+        </div>
+        <div class="inputrow">
+            <label for="teacherLname">Last Name:</label>
+            <input type="text" id="teacherLname" name="teacherLname" value="@Model.TeacherLname"/>
+        </div>
+        <div class="inputrow">
+            <label for="employeenumber">Employeenumber:</label>
+            <input type="text" id="employeenumber" name="employeenumber" value="@Model.EmployeeNumber"/>
+        </div>
+        <div class="inputrow">
+            <label for="hiredate">Hiredate:</label>
+            <input type="text" id="hiredate" name="hiredate" value="@Model.HireDate" />
+        </div>
+        <div class="inputrow">
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary" value="@Model.Salary" />
+        </div>
+        <div class="inputrow">
+            <input type="submit" value="Update Teacher" />
+        </div>
+    </form>
+</div>
+
